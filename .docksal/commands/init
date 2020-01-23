@@ -97,9 +97,7 @@ run_updates ()
 	fin exec "APP_ENV=dev drush config-set system.file path.temporary /tmp -y"
 	fin exec "APP_ENV=dev drush cc drush"
 	fin exec "APP_ENV=dev drush cr -l http://${VIRTUAL_HOST}"
-	fin drush pmu openy_prgf_activity_finder -y -l http://${VIRTUAL_HOST}
 	fin exec "APP_ENV=dev drush -y updb -l http://${VIRTUAL_HOST}"
-	fin exec "APP_ENV=dev drush -y entup -l http://${VIRTUAL_HOST}"
 }
 
 # Fix file/folder permissions
