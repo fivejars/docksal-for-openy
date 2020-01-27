@@ -7,6 +7,8 @@ services:
       - SITE_DIRECTORY
       - SOURCE_ALIAS
       - VIRTUAL_HOST
+    volumes:
+      - composer_cache:/home/docker/.composer/cache
   # Adminer
   adminer:
     hostname: adminer
@@ -26,3 +28,7 @@ services:
     extends:
       file: ${HOME}/.docksal/stacks/services.yml
       service: solr
+
+volumes:
+  composer_cache:
+    external: true
