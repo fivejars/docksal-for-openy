@@ -104,7 +104,7 @@ init_settings ()
 	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.carnation.php" "${SITEDIR_CARNATION}/settings.local.php"
 
 	# Mutlisiting configuration
-	sed 's/%VIRTUAL_HOST%/${VIRTUAL_HOST}/g' ${DRUPAL_SETTINGS}/sites.php > ${DOCROOT_PATH}/sites/sites.php
+	sed "s/%VIRTUAL_HOST%/${VIRTUAL_HOST}/g" ${DRUPAL_SETTINGS}/sites.php > ${DOCROOT_PATH}/sites/sites.php
 }
 
 # Initialize local settings files
