@@ -152,11 +152,14 @@ enable_modules ()
 }
 
 # Create databases
-import_database ()
+create_databases ()
 {
-	fin db create 'rose'
-	fin db create 'lily'
-	fin db create 'carnation'
+	fin db create rose
+	fin db create lily
+	fin db create carnation
+	fin db cli 'GRANT ALL PRIVILEGES ON rose.* TO "user"@"%"'
+	fin db cli 'GRANT ALL PRIVILEGES ON lily.* TO "user"@"%"'
+	fin db cli 'GRANT ALL PRIVILEGES ON carnation.* TO "user"@"%"'
 }
 
 # Import database dump
@@ -229,6 +232,7 @@ echo -e "${green_bg} Step 2.5 ${NC}${green} Installing vendors...${NC}"
 time composer_install
 
 echo -e "${green_bg} Step 3 ${NC}${green} Importing the database dump...${NC}"
+time create_databases
 time import_database
 #time import_database_from_volume
 
