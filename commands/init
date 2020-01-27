@@ -224,14 +224,14 @@ else
 fi
 
 echo -e "${green_bg} Step 2.5 ${NC}${green} Installing vendors...${NC}"
-composer_install
+time composer_install
 
 echo -e "${green_bg} Step 3 ${NC}${green} Importing the database dump...${NC}"
 time import_database
 #time import_database_from_volume
 
 echo -e "${green_bg} Step 4 ${NC}${green} Run updates...${NC}"
-#time run_updates
+time run_updates
 
 echo -e "${green_bg} Step 5 ${NC}${green} Enabling modules...${NC}"
 #time enable_modules
