@@ -105,6 +105,9 @@ init_settings ()
 
 	# Mutlisiting configuration
 	sed "s/%VIRTUAL_HOST%/${VIRTUAL_HOST}/g" ${DRUPAL_SETTINGS}/sites.php > ${DOCROOT_PATH}/sites/sites.php
+
+	mkdir -p ${PROJECT_ROOT}/drush/aliases
+	copy_settings_file "${DRUPAL_SETTINGS}/aliases.drushrc.php" "${PROJECT_ROOT}/drush/aliases/aliases.drushrc.php"
 }
 
 # Initialize local settings files
@@ -123,32 +126,6 @@ setup_project ()
 	fin drush config-set shield.config password ${SHIELD_PASS} -y
 	fin drush config-set system.performance css.preprocess 0 -y
 	fin drush config-set system.performance js.preprocess 0 -y
-}
-
-run_updates ()
-{
-	cd $DOCROOT_PATH
-
-	fin drush config-set system.file path.temporary /tmp -y
-	fin drush cc drush
-	fin drush cr -l http://${VIRTUAL_HOST}
-	fin drush -y updb -l http://${VIRTUAL_HOST}
-}
-
-# Install site
-site_install ()
-{
-	cd $DOCROOT_PATH
-
-	# We disable email sending here so site-install does not return an error
-	fin exec "PHP_OPTIONS="'"-d sendmail_path=`which true`"'" drush site-install -y --site-name='My Drupal 8 Site'"
-}
-
-# Enable modules
-enable_modules ()
-{
-	cd $DOCROOT_PATH
-	fin drush en -y devel shield views_ui dblog
 }
 
 # Create databases
@@ -171,8 +148,13 @@ import_database ()
 		cd ${DB_DATA_VOLUME_DIR}
 		echo "Downloading a fresh data volume..."
 		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE}
+		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE_ROSE}
+		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE_LILY}
+		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE_CARNATION}
 	fi
-	gunzip -c ${DB_DATA_VOLUME} | fin db import
+	gunzip -c ${DB_DATA_VOLUME_ROSE} | fin db import --db=rose
+	gunzip -c ${DB_DATA_VOLUME_LILY} | fin db import --db=lily
+	gunzip -c ${DB_DATA_VOLUME_CARNATION} | fin db import --db=carnation
 }
 
 # Import database from volume
@@ -204,6 +186,35 @@ import_database_from_volume ()
 
 	echo "Waiting 10s for MySQL to initialize...";
 	sleep 10
+}
+
+run_updates ()
+{
+	cd $DOCROOT_PATH
+
+	fin drush cc drush
+	fin drush @rose cr
+	fin drush @rose updb -y
+	fin drush @lily cr
+	fin drush @lily updb -y
+	fin drush @carnation cr
+	fin drush @carnation updb -y
+}
+
+# Install site
+site_install ()
+{
+	cd $DOCROOT_PATH
+
+	# We disable email sending here so site-install does not return an error
+	fin exec "PHP_OPTIONS="'"-d sendmail_path=`which true`"'" drush site-install -y --site-name='My Drupal 8 Site'"
+}
+
+# Enable modules
+enable_modules ()
+{
+	cd $DOCROOT_PATH
+	fin drush en -y devel shield views_ui dblog
 }
 
 #-------------------------- END: Functions --------------------------------
