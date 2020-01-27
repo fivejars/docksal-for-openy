@@ -193,5 +193,9 @@ if (PHP_SAPI !== 'cli') {
     }
 }
 
+# Config directories.
+$config_directories['staging'] = 'sites/default/config/staging';
+$config_directories['sync'] = 'sites/default/config/staging';
+
 # Stage file proxy
 #$config['stage_file_proxy.settings']['origin'] = "http://ymcagbwstg.prod.acquia-sites.com ";
