@@ -81,6 +81,8 @@ fix_permissions ()
 
 	mkdir -p ${PROJECT_ROOT}/private_files
 	chmod o+w ${PROJECT_ROOT}/private_files
+
+	mkdir -p ${DOCROOT_PATH}/libraries
 }
 
 # Initialize local settings files
