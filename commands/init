@@ -182,7 +182,6 @@ fi
 echo -e "${green_bg} Step 1 ${NC}${green} Initializing local project configuration...${NC}"
 fix_permissions
 init_settings
-composer_install
 
 if [[ $DOCKER_RUNNING == "true" ]]; then
 	echo -e "${green_bg} Step 2 ${NC}${green} Recreating services...${NC}"
@@ -194,6 +193,9 @@ fi
 
 echo "Waiting 10s for MySQL to initialize...";
 sleep 10
+
+echo -e "${green_bg} Step 2.5 ${NC}${green} Installing vendors...${NC}"
+composer_install
 
 echo -e "${green_bg} Step 3 ${NC}${green} Importing the database dump...${NC}"
 time import_database
