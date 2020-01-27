@@ -15,6 +15,9 @@ set -e
 SITE_DIRECTORY="default"
 DOCROOT_PATH="${PROJECT_ROOT}/${DOCROOT}"
 SITEDIR_PATH="${DOCROOT_PATH}/sites/${SITE_DIRECTORY}"
+SITEDIR_ROSE="${DOCROOT_PATH}/sites/rose"
+SITEDIR_LILY="${DOCROOT_PATH}/sites/lily"
+SITEDIR_CARNATION="${DOCROOT_PATH}/sites/carnation"
 
 #-------------------------- END: Settings --------------------------------
 
@@ -67,8 +70,14 @@ copy_settings_file()
 fix_permissions ()
 {
 	echo-green "Making site directory writable..."
-	mkdir -p ${PROJECT_ROOT}/docroot/sites/default/files
-	chmod o+w ${PROJECT_ROOT}/docroot/sites/default/files
+	mkdir -p ${SITEDIR_PATH}/files
+	chmod o+w ${SITEDIR_PATH}/files
+	mkdir -p ${SITEDIR_ROSE}/files
+	chmod o+w ${SITEDIR_ROSE}/files
+	mkdir -p ${SITEDIR_LILY}/files
+	chmod o+w ${SITEDIR_LILY}/files
+	mkdir -p ${SITEDIR_CARNATION}/files
+	chmod o+w ${SITEDIR_CARNATION}/files
 
 	mkdir -p ${PROJECT_ROOT}/private_files
 	chmod o+w ${PROJECT_ROOT}/private_files
@@ -77,8 +86,23 @@ fix_permissions ()
 # Initialize local settings files
 init_settings ()
 {
+	DRUPAL_SETTINGS="${PROJECT_ROOT}/.docksal/drupal"
+
 	rm -f ${SITEDIR_PATH}/settings.php
-	copy_settings_file "${PROJECT_ROOT}/.docksal/files/default.settings.php" "${SITEDIR_PATH}/settings.php"
+	# Default
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_PATH}/settings.php"
+	# Rose
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_ROSE}/settings.php"
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.rose.php" "${SITEDIR_ROSE}/settings.local.php"
+	# Lily
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_LILY}/settings.php"
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.lily.php" "${SITEDIR_LILY}/settings.local.php"
+	# Carnation
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_CARNATION}/settings.php"
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.carnation.php" "${SITEDIR_CARNATION}/settings.local.php"
+
+	# Mutlisiting configuration
+	sed 's/%VIRTUAL_HOST%/${VIRTUAL_HOST}/g' ${DRUPAL_SETTINGS}/sites.php > ${DOCROOT_PATH}/sites/sites.php
 }
 
 # Initialize local settings files
@@ -123,6 +147,14 @@ enable_modules ()
 {
 	cd $DOCROOT_PATH
 	fin drush en -y devel shield views_ui dblog
+}
+
+# Create databases
+import_database ()
+{
+	fin db create 'rose'
+	fin db create 'lily'
+	fin db create 'carnation'
 }
 
 # Import database dump
@@ -190,9 +222,6 @@ else
 	echo -e "${green_bg} Step 2 ${NC}${green} Creating services...${NC}"
 	fin up
 fi
-
-echo "Waiting 10s for MySQL to initialize...";
-sleep 10
 
 echo -e "${green_bg} Step 2.5 ${NC}${green} Installing vendors...${NC}"
 composer_install
