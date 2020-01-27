@@ -199,3 +199,7 @@ $config_directories['sync'] = 'sites/default/config/staging';
 
 # Stage file proxy
 #$config['stage_file_proxy.settings']['origin'] = "http://ymcagbwstg.prod.acquia-sites.com ";
+
+if (file_exists(__DIR__ . '/settings.local.php')) {
+  include __DIR__ . '/settings.local.php';
+}
