@@ -114,6 +114,13 @@ init_settings ()
 composer_install ()
 {
 	fin exec "COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev"
+
+	# Workaround for the libraries downloaded from npm-asset
+	cd $DOCROOT_PATH/libraries
+	ln -s ../../vendor/npm-asset/blazy blazy
+	ln -s ../../vendor/npm-asset/dropzone dropzone
+	ln -s ../../vendor/npm-asset/slick-carousel slick-carousel
+	ln -s ../../vendor/npm-asset/jquery.easing jquery.easing
 }
 
 # Setup project dependencies
