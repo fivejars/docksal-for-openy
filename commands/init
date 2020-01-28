@@ -123,27 +123,13 @@ composer_install ()
 	ln -s ../../vendor/npm-asset/jquery.easing jquery.easing
 }
 
-# Setup project dependencies
-setup_project ()
-{
-	cd $DOCROOT_PATH
-
-	fin drush config-set shield.config enabled 1 -y
-	fin drush config-set shield.config login ${SHIELD_USER} -y
-	fin drush config-set shield.config password ${SHIELD_PASS} -y
-	fin drush config-set system.performance css.preprocess 0 -y
-	fin drush config-set system.performance js.preprocess 0 -y
-}
-
 # Create databases
 create_databases ()
 {
-	fin db create rose
-	fin db create lily
-	fin db create carnation
-	fin db cli 'GRANT ALL PRIVILEGES ON rose.* TO "user"@"%"'
-	fin db cli 'GRANT ALL PRIVILEGES ON lily.* TO "user"@"%"'
-	fin db cli 'GRANT ALL PRIVILEGES ON carnation.* TO "user"@"%"'
+	for DATABASE in rose lily carnation; do
+		fin db create $DATABASE
+		fin db cli 'GRANT ALL PRIVILEGES ON ${DATABASE}.* TO "user"@"%"'
+	done
 }
 
 # Import database dump
@@ -200,12 +186,10 @@ run_updates ()
 	cd $DOCROOT_PATH
 
 	fin drush cc drush
-	fin drush @rose cr
-	fin drush @rose updb -y
-	fin drush @lily cr
-	fin drush @lily updb -y
-	fin drush @carnation cr
-	fin drush @carnation updb -y
+	for SITE in @rose @lily @carnation; do
+		fin drush $SITE cr
+		fin drush $SITE updb -y
+	done
 }
 
 # Install site
@@ -221,7 +205,25 @@ site_install ()
 enable_modules ()
 {
 	cd $DOCROOT_PATH
-	fin drush en -y devel shield views_ui dblog
+
+	for SITE in @rose @lily @carnation; do
+		fin drush $SITE en -y devel stage_file_proxy views_ui dblog
+	done
+}
+
+# Setup additional project configuration.
+setup_project ()
+{
+	cd $DOCROOT_PATH
+
+	# Custom configuration amendments.
+	for SITE in @rose @lily @carnation; do
+		fin drush $SITE config-set stage_file_proxy.settings origin $STAGE_FILE_PROXY_ORIGIN -y
+		fin drush $SITE config-set stage_file_proxy.settings origin_dir $STAGE_FILE_PROXY_ORIGIN_dir -y
+	done
+	#fin drush config-set shield.config enabled 1 -y
+	#fin drush config-set shield.config login ${SHIELD_USER} -y
+	#fin drush config-set shield.config password ${SHIELD_PASS} -y
 }
 
 #-------------------------- END: Functions --------------------------------
@@ -258,10 +260,10 @@ echo -e "${green_bg} Step 4 ${NC}${green} Run updates...${NC}"
 time run_updates
 
 echo -e "${green_bg} Step 5 ${NC}${green} Enabling modules...${NC}"
-#time enable_modules
+time enable_modules
 
 echo -e "${green_bg} Step 6 ${NC}${green} Setup project...${NC}"
-#time setup_project
+time setup_project
 
 if is_windows; then
 	echo-green "Add ${VIRTUAL_HOST} to your hosts file (/etc/hosts), e.g.:"
@@ -271,6 +273,9 @@ fi
 
 echo -en "${green_bg} DONE! ${NC} "
 echo -e "Open ${yellow}http://${VIRTUAL_HOST}${NC} in your browser to verify the setup."
+echo -e "Open ${yellow}http://rose.${VIRTUAL_HOST}${NC} in your browser to verify the setup."
+echo -e "Open ${yellow}http://lily.${VIRTUAL_HOST}${NC} in your browser to verify the setup."
+echo -e "Open ${yellow}http://carnation.${VIRTUAL_HOST}${NC} in your browser to verify the setup."
 
 #-------------------------- END: Execution --------------------------------
 
