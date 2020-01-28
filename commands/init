@@ -128,7 +128,7 @@ create_databases ()
 {
 	for DATABASE in rose lily carnation; do
 		fin db create $DATABASE
-		fin db cli 'GRANT ALL PRIVILEGES ON ${DATABASE}.* TO "user"@"%"'
+		fin db cli "GRANT ALL PRIVILEGES ON ${DATABASE}.* TO \"user\"@\"%\""
 	done
 }
 
