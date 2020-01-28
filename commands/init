@@ -218,8 +218,8 @@ setup_project ()
 
 	# Custom configuration amendments.
 	for SITE in @rose @lily @carnation; do
-		fin drush $SITE config-set stage_file_proxy.settings origin $STAGE_FILE_PROXY_ORIGIN -y
-		fin drush $SITE config-set stage_file_proxy.settings origin_dir $STAGE_FILE_PROXY_ORIGIN_dir -y
+		fin drush $SITE config-set stage_file_proxy.settings origin ${STAGE_FILE_PROXY_ORIGIN} -y
+		fin drush $SITE config-set stage_file_proxy.settings origin_dir ${STAGE_FILE_PROXY_ORIGIN_DIR} -y
 	done
 	#fin drush config-set shield.config enabled 1 -y
 	#fin drush config-set shield.config login ${SHIELD_USER} -y
