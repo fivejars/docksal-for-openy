@@ -187,7 +187,7 @@ run_updates ()
 
 	fin drush cc drush
 	for SITE in @rose @lily @carnation; do
-		fin drush $SITE cr
+		#fin drush $SITE cr
 		fin drush $SITE updb -y
 	done
 }
