@@ -7,4 +7,5 @@
 fin exec phpcs
 
 cd "${PROJECT_ROOT}/openy_gated_content/js/gated-content"
+fin exec npm install
 fin exec npm run lint-no-fix
