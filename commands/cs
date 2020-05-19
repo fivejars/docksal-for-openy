@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+## Code standards check
+##
+## Usage: fin cs
+
+fin exec phpcs
+
+cd "${PROJECT_ROOT}/openy_gated_content/js/gated-content"
+fin exec npm run lint-no-fix
