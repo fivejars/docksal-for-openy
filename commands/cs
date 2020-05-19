@@ -4,6 +4,7 @@
 ##
 ## Usage: fin cs
 
+cd "${PROJECT_ROOT}/openy_gated_content"
 fin exec phpcs
 
 cd "${PROJECT_ROOT}/openy_gated_content/js/gated-content"
