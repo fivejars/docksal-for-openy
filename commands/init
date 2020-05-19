@@ -123,6 +123,13 @@ composer_install ()
 	ln -s ../../vendor/npm-asset/jquery.easing jquery.easing
 }
 
+# Initialize local settings files
+build_js ()
+{
+	cd ${PROJECT_ROOT}/openy_gated_content/js/gated-content
+	fin exec npm run build
+}
+
 # Create databases
 create_databases ()
 {
@@ -223,10 +230,10 @@ setup_project ()
 	cd $DOCROOT_PATH
 
 	# Custom configuration amendments.
-	for SITE in @rose @lily @carnation; do
-		fin drush $SITE config-set stage_file_proxy.settings origin ${STAGE_FILE_PROXY_ORIGIN} -y
-		fin drush $SITE config-set stage_file_proxy.settings origin_dir ${STAGE_FILE_PROXY_ORIGIN_DIR} -y
-	done
+	#for SITE in @rose @lily @carnation; do
+	#	fin drush $SITE config-set stage_file_proxy.settings origin ${STAGE_FILE_PROXY_ORIGIN} -y
+	#	fin drush $SITE config-set stage_file_proxy.settings origin_dir ${STAGE_FILE_PROXY_ORIGIN_DIR} -y
+	#done
 	#fin drush config-set shield.config enabled 1 -y
 	#fin drush config-set shield.config login ${SHIELD_USER} -y
 	#fin drush config-set shield.config password ${SHIELD_PASS} -y
@@ -254,21 +261,24 @@ else
 	fin up
 fi
 
-echo -e "${green_bg} Step 2.5 ${NC}${green} Installing vendors...${NC}"
+echo -e "${green_bg} Step 3 ${NC}${green} Installing vendors...${NC}"
 time composer_install
 
-echo -e "${green_bg} Step 3 ${NC}${green} Importing the database dump...${NC}"
+echo -e "${green_bg} Step 4 ${NC}${green} Build JS app...${NC}"
+time build_js
+
+echo -e "${green_bg} Step 5 ${NC}${green} Importing the database dump...${NC}"
 time create_databases
 time import_database
 #time import_database_from_volume
 
-echo -e "${green_bg} Step 4 ${NC}${green} Run updates...${NC}"
+echo -e "${green_bg} Step 6 ${NC}${green} Run updates...${NC}"
 time run_updates
 
-echo -e "${green_bg} Step 5 ${NC}${green} Enabling modules...${NC}"
+echo -e "${green_bg} Step 7 ${NC}${green} Enabling modules...${NC}"
 time enable_modules
 
-echo -e "${green_bg} Step 6 ${NC}${green} Setup project...${NC}"
+echo -e "${green_bg} Step 8 ${NC}${green} Setup project...${NC}"
 time setup_project
 
 if is_windows; then
