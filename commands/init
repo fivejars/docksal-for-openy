@@ -117,10 +117,13 @@ composer_install ()
 
 	# Workaround for the libraries downloaded from npm-asset
 	cd $DOCROOT_PATH/libraries
-	ln -s ../../vendor/npm-asset/blazy blazy
-	ln -s ../../vendor/npm-asset/dropzone dropzone
-	ln -s ../../vendor/npm-asset/slick-carousel slick-carousel
-	ln -s ../../vendor/npm-asset/jquery.easing jquery.easing
+    for LIBRARY in blazy dropzone slick-carousel jquery.easing; do
+        if [[ ! -d "$DOCROOT_PATH/libraries/$LIBRARY" ]]
+        then
+            echo "Create symlink for $LIBRARY"
+            ln -s ../../vendor/npm-asset/$LIBRARY $LIBRARY
+        fi
+    done
 }
 
 # Initialize local settings files
