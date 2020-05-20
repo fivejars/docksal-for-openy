@@ -4,6 +4,8 @@
 ##
 ## Usage: fin cs
 
+set -e
+
 cd "${PROJECT_ROOT}/openy_gated_content"
 fin exec phpcs
 
