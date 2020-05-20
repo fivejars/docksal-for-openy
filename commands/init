@@ -151,10 +151,9 @@ import_database ()
 		mkdir -p ${DB_DATA_VOLUME_DIR}
 		cd ${DB_DATA_VOLUME_DIR}
 		echo "Downloading a fresh data volume..."
-		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE}
-		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE_ROSE}
-		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE_LILY}
-		time wget --http-user=${DUMP_USER} --http-password=${DUMP_PASS} -N ${DB_DATA_VOLUME_REMOTE_CARNATION}
+		time wget -N ${DB_DATA_VOLUME_REMOTE_ROSE}
+		time wget -N ${DB_DATA_VOLUME_REMOTE_LILY}
+		time wget -N ${DB_DATA_VOLUME_REMOTE_CARNATION}
 	fi
 	gunzip -c ${DB_DATA_VOLUME_ROSE} | fin db import --db=rose
 	gunzip -c ${DB_DATA_VOLUME_LILY} | fin db import --db=lily
