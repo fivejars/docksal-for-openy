@@ -219,6 +219,7 @@ enable_modules ()
 	echo "Enabling Gated content"
 	for SITE in @rose @lily @carnation; do
 		fin drush $SITE en -y openy_gc_demo
+		fin drush $SITE upwd admin --password=password
 	done
 
 	echo "Enabling dev modules"
