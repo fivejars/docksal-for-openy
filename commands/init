@@ -235,6 +235,8 @@ setup_project ()
 
 	# Import demo content.
 	for SITE in @rose @lily @carnation; do
+		drush $SITE en openy_demo_bfooter -y
+		drush $SITE mim --group=openy_demo_fblock
 		fin drush $SITE mim --group=virtual_y
 	done
 }
