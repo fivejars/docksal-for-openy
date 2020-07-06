@@ -198,7 +198,8 @@ $config_directories['staging'] = 'sites/default/config/staging';
 $config_directories['sync'] = 'sites/default/config/staging';
 
 # Stage file proxy
-$config['stage_file_proxy.settings']['origin'] = "http://sandbox.openymca.org";
+$config['stage_file_proxy.settings']['origin'] = 'https://sandbox-carnation-std.openy.org';
+$config['stage_file_proxy.settings']['origin_dir'] = 'sites/default/files';
 
 if (file_exists(__DIR__ . '/settings.local.php')) {
   include __DIR__ . '/settings.local.php';
