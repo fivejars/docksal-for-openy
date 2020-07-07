@@ -237,6 +237,7 @@ setup_project ()
 	for SITE in @rose @lily @carnation; do
 		fin drush $SITE en openy_demo_bfooter -y
 		fin drush $SITE mim --group=openy_demo_fblock
+		fin drush $SITE mim --group=openy_demo_term
 		fin drush $SITE mim --group=virtual_y
 	done
 }
