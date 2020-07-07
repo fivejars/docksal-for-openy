@@ -239,6 +239,8 @@ setup_project ()
 		fin drush $SITE mim --group=openy_demo_fblock
 		fin drush $SITE mim --group=openy_demo_term
 		fin drush $SITE mim --group=virtual_y
+		# Set Virtual Y login as home page.
+		fin drush $SITE -y cset system.site page.front /virtual-y-login
 	done
 }
 
