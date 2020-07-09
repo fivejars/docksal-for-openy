@@ -242,6 +242,9 @@ setup_project ()
 		# Set Virtual Y login as home page.
 		fin drush $SITE -y cset system.site page.front /virtual-y-login
 	done
+
+	# Disable search in carnation.
+	fin drush @carnation -y cset openy_carnation.settings display_search_form 0
 }
 
 #-------------------------- END: Functions --------------------------------
