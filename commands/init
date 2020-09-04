@@ -18,6 +18,7 @@ SITEDIR_PATH="${DOCROOT_PATH}/sites/${SITE_DIRECTORY}"
 SITEDIR_ROSE="${DOCROOT_PATH}/sites/rose"
 SITEDIR_LILY="${DOCROOT_PATH}/sites/lily"
 SITEDIR_CARNATION="${DOCROOT_PATH}/sites/carnation"
+SITEDIR_UPGRADE="${DOCROOT_PATH}/sites/upgrade"
 
 #-------------------------- END: Settings --------------------------------
 
@@ -78,6 +79,8 @@ fix_permissions ()
 	chmod o+w ${SITEDIR_LILY}/files
 	mkdir -p ${SITEDIR_CARNATION}/files
 	chmod o+w ${SITEDIR_CARNATION}/files
+    mkdir -p ${SITEDIR_UPGRADE}/files
+    chmod o+w ${SITEDIR_UPGRADE}/files
 
 	mkdir -p ${PROJECT_ROOT}/private_files
 	chmod o+w ${PROJECT_ROOT}/private_files
@@ -102,6 +105,9 @@ init_settings ()
 	# Carnation
 	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_CARNATION}/settings.php"
 	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.carnation.php" "${SITEDIR_CARNATION}/settings.local.php"
+    # Upgrade
+    copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_UPGRADE}/settings.php"
+    copy_settings_file "${DRUPAL_SETTINGS}/settings.local.upgrade.php" "${SITEDIR_UPGRADE}/settings.local.php"
 
 	# Mutlisiting configuration
 	sed "s/%VIRTUAL_HOST%/${VIRTUAL_HOST}/g" ${DRUPAL_SETTINGS}/sites.php > ${DOCROOT_PATH}/sites/sites.php
@@ -137,7 +143,7 @@ build_js ()
 # Create databases
 create_databases ()
 {
-	for DATABASE in rose lily carnation; do
+	for DATABASE in rose lily carnation upgrade; do
 		fin db create $DATABASE
 		fin db cli "GRANT ALL PRIVILEGES ON ${DATABASE}.* TO \"user\"@\"%\""
 	done
@@ -154,10 +160,12 @@ import_database ()
 		time wget -N ${DB_DATA_VOLUME_REMOTE_ROSE}
 		time wget -N ${DB_DATA_VOLUME_REMOTE_LILY}
 		time wget -N ${DB_DATA_VOLUME_REMOTE_CARNATION}
+		time wget -N ${DB_DATA_VOLUME_REMOTE_UPGRADE}
 	fi
 	gunzip -c ${DB_DATA_VOLUME_ROSE} | fin db import --db=rose
 	gunzip -c ${DB_DATA_VOLUME_LILY} | fin db import --db=lily
 	gunzip -c ${DB_DATA_VOLUME_CARNATION} | fin db import --db=carnation
+	gunzip -c ${DB_DATA_VOLUME_UPGRADE} | fin db import --db=upgrade
 }
 
 # Import database from volume
@@ -196,7 +204,8 @@ run_updates ()
 	cd $DOCROOT_PATH
 
 	fin drush cc drush
-	for SITE in @rose @lily @carnation; do
+	for SITE in @rose @lily @carnation @upgrade; do
+        echo "Run updates for $SITE"
 		#fin drush $SITE cr
 		fin drush $SITE updb -y
 	done
@@ -217,13 +226,13 @@ enable_modules ()
 	cd $DOCROOT_PATH
 
 	echo "Enabling Gated content"
-	for SITE in @rose @lily @carnation; do
+	for SITE in @rose @lily @carnation @upgrade; do
 		fin drush $SITE en -y openy_gc_demo
 		fin drush $SITE upwd admin --password=open9622
 	done
 
 	echo "Enabling dev modules"
-	for SITE in @rose @lily @carnation; do
+	for SITE in @rose @lily @carnation @upgrade; do
 		fin drush $SITE en -y devel stage_file_proxy views_ui dblog
 	done
 }
@@ -234,7 +243,7 @@ setup_project ()
 	cd $DOCROOT_PATH
 
 	# Import demo content.
-	for SITE in @rose @lily @carnation; do
+	for SITE in @rose @lily @carnation @upgrade; do
 		fin drush $SITE en openy_demo_bfooter -y
 		fin drush $SITE mim --group=openy_demo_fblock
 		fin drush $SITE mim --group=openy_demo_term
@@ -300,6 +309,7 @@ echo -e "Open ${yellow}http://${VIRTUAL_HOST}${NC} in your browser to verify the
 echo -e "Open ${yellow}http://rose.${VIRTUAL_HOST}${NC} in your browser to verify the setup."
 echo -e "Open ${yellow}http://lily.${VIRTUAL_HOST}${NC} in your browser to verify the setup."
 echo -e "Open ${yellow}http://carnation.${VIRTUAL_HOST}${NC} in your browser to verify the setup."
+echo -e "Open ${yellow}http://upgrade.${VIRTUAL_HOST}${NC} in your browser to verify the setup."
 
 #-------------------------- END: Execution --------------------------------
 
