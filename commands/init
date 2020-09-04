@@ -226,13 +226,13 @@ enable_modules ()
 	cd $DOCROOT_PATH
 
 	echo "Enabling Gated content"
-	for SITE in @rose @lily @carnation @upgrade; do
+	for SITE in @rose @lily @carnation; do
 		fin drush $SITE en -y openy_gc_demo
 		fin drush $SITE upwd admin --password=open9622
 	done
 
 	echo "Enabling dev modules"
-	for SITE in @rose @lily @carnation @upgrade; do
+	for SITE in @rose @lily @carnation; do
 		fin drush $SITE en -y devel stage_file_proxy views_ui dblog
 	done
 }
