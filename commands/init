@@ -232,7 +232,7 @@ enable_modules ()
 
 	echo "Enabling dev modules"
 	for SITE in @rose @lily @carnation @upgrade; do
-		fin drush $SITE en -y devel stage_file_proxy views_ui dblog
+		fin drush $SITE en -y devel stage_file_proxy views_ui dblog openy_gc_shared_content
 		fin drush $SITE upwd admin --password=open9622
 	done
 }
