@@ -119,7 +119,7 @@ init_settings ()
 # Initialize local settings files
 composer_install ()
 {
-	fin exec "COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev"
+	fin exec "COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev -vvv"
 
 	# Workaround for the libraries downloaded from npm-asset
 	cd $DOCROOT_PATH/libraries
