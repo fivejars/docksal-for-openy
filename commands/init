@@ -79,8 +79,11 @@ fix_permissions ()
 	chmod o+w ${SITEDIR_LILY}/files
 	mkdir -p ${SITEDIR_CARNATION}/files
 	chmod o+w ${SITEDIR_CARNATION}/files
-    mkdir -p ${SITEDIR_UPGRADE}/files
-    chmod o+w ${SITEDIR_UPGRADE}/files
+	mkdir -p ${SITEDIR_UPGRADE}/files
+	chmod o+w ${SITEDIR_UPGRADE}/files
+
+	mkdir -p ${DOCROOT_PATH}/sites/default/config/staging
+	chmod o+w ${DOCROOT_PATH}/sites/default/config/staging
 
 	mkdir -p ${PROJECT_ROOT}/private_files
 	chmod o+w ${PROJECT_ROOT}/private_files
@@ -105,31 +108,21 @@ init_settings ()
 	# Carnation
 	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_CARNATION}/settings.php"
 	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.carnation.php" "${SITEDIR_CARNATION}/settings.local.php"
-    # Upgrade
-    copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_UPGRADE}/settings.php"
-    copy_settings_file "${DRUPAL_SETTINGS}/settings.local.upgrade.php" "${SITEDIR_UPGRADE}/settings.local.php"
+	# Upgrade
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.php" "${SITEDIR_UPGRADE}/settings.php"
+	copy_settings_file "${DRUPAL_SETTINGS}/settings.local.upgrade.php" "${SITEDIR_UPGRADE}/settings.local.php"
 
 	# Mutlisiting configuration
 	sed "s/%VIRTUAL_HOST%/${VIRTUAL_HOST}/g" ${DRUPAL_SETTINGS}/sites.php > ${DOCROOT_PATH}/sites/sites.php
 
-	mkdir -p ${PROJECT_ROOT}/drush/aliases
-	copy_settings_file "${DRUPAL_SETTINGS}/aliases.drushrc.php" "${PROJECT_ROOT}/drush/aliases/aliases.drushrc.php"
+	mkdir -p ${PROJECT_ROOT}/drush/sites
+	sed "s/%VIRTUAL_HOST%/${VIRTUAL_HOST}/g" ${DRUPAL_SETTINGS}/self.site.yml > ${PROJECT_ROOT}/drush/sites/self.site.yml
 }
 
 # Initialize local settings files
 composer_install ()
 {
-	fin exec "COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev -vvv"
-
-	# Workaround for the libraries downloaded from npm-asset
-	cd $DOCROOT_PATH/libraries
-    for LIBRARY in blazy dropzone slick-carousel jquery.easing; do
-        if [[ ! -d "$DOCROOT_PATH/libraries/$LIBRARY" ]]
-        then
-            echo "Create symlink for $LIBRARY"
-            ln -s ../../vendor/npm-asset/$LIBRARY $LIBRARY
-        fi
-    done
+	fin exec "COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev"
 }
 
 # Initialize local settings files
@@ -205,7 +198,7 @@ run_updates ()
 
 	fin drush cc drush
 	for SITE in @rose @lily @carnation @upgrade; do
-        echo "Run updates for $SITE"
+		echo "Run updates for $SITE"
 		#fin drush $SITE cr
 		fin drush $SITE updb -y
 	done
@@ -233,7 +226,7 @@ enable_modules ()
 	echo "Enabling dev modules"
 	for SITE in @rose @lily @carnation @upgrade; do
 		fin drush $SITE en -y devel stage_file_proxy views_ui dblog openy_gc_shared_content
-		fin drush $SITE upwd admin --password=open9622
+		fin drush $SITE upwd admin open9622
 	done
 }
 
