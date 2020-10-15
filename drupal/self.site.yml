@@ -1,0 +1,15 @@
+default:
+  root: /var/www/docroot
+  uri: http://%VIRTUAL_HOST%
+rose:
+  root: /var/www/docroot
+  uri: http://rose.%VIRTUAL_HOST%
+lily:
+  root: /var/www/docroot
+  uri: http://lily.%VIRTUAL_HOST%
+carnation:
+  root: /var/www/docroot
+  uri: http://carnation.%VIRTUAL_HOST%
+upgrade:
+  root: /var/www/docroot
+  uri: http://upgrade.%VIRTUAL_HOST%
