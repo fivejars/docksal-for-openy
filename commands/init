@@ -243,6 +243,9 @@ setup_project ()
 		fin drush $SITE mim --group=virtual_y
 		# Set Virtual Y login as home page.
 		fin drush $SITE -y cset system.site page.front /virtual-y-login
+		# Set Virtual Y recaptcha keys.
+		fin drush $SITE -y cset recaptcha.settings site_key 6LfCiMoZAAAAAKTLI7VrO5Lx4HD7KowBTytsBorJ
+		fin drush $SITE -y cset recaptcha.settings secret_key 6LfCiMoZAAAAAAd9aEhHeEod-4YhO7qfyDOZfD0P
 	done
 
 	# Disable search in carnation.
