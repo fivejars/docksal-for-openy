@@ -89,7 +89,7 @@ $config['system.performance']['js']['preprocess'] = FALSE;
  * During development it can be useful to install test extensions for debugging
  * purposes.
  */
-$settings['extension_discovery_scan_tests'] = TRUE;
+$settings['extension_discovery_scan_tests'] = FALSE;
 
 /**
  * Enable access to rebuild.php.
@@ -196,6 +196,7 @@ if (PHP_SAPI !== 'cli') {
 # Config directories.
 $config_directories['staging'] = 'sites/default/config/staging';
 $config_directories['sync'] = 'sites/default/config/staging';
+$settings['config_sync_directory'] = 'sites/default/config/staging';
 
 # Stage file proxy
 $config['stage_file_proxy.settings']['origin'] = 'https://sandbox-carnation-std.openy.org';

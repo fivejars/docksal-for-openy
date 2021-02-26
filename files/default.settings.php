@@ -775,6 +775,7 @@ $databases = array(
 
 $config_directories['staging'] = 'sites/default/config/staging';
 $config_directories['sync'] = 'sites/default/config/staging';
+$settings['config_sync_directory'] = 'sites/default/config/staging';
 $settings['file_public_path'] = 'sites/default/files';
 $settings['cache']['bins']['render'] = 'cache.backend.memory';
 $config['stage_file_proxy.settings']['origin'] = 'https://www.ymcamn.org';
