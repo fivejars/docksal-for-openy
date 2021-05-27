@@ -1,0 +1,16 @@
+grumphp:
+    git_hook_variables:
+        EXEC_GRUMPHP_COMMAND: fin run-cli php
+    tasks:
+        phplint:
+            triggered_by:
+                - php
+                - module
+                - theme
+                - install
+                - inc
+        phpcs:
+            ignore_patterns:
+                - drush/
+        jsonlint: ~
+        yamllint: ~

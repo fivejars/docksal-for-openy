@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="VY">
+  <description>PHP Code Sniffer configuration for VY.</description>
+  <arg name="colors"/>
+  <arg value="s" />
+  <arg name="cache" value=".phpcs-cache"/>
+  <arg name="parallel" value="10"/>
+  <rule ref="AcquiaDrupalStrict">
+    <exclude name="Drupal.InfoFiles.AutoAddedKeys.Version"/>
+    <exclude name="PHPCompatibility.Keywords.ForbiddenNamesAsDeclared.resourceFound"/>
+    <exclude name="Drupal.Commenting.Deprecated.DeprecatedWrongSeeUrlFormat"/>
+  </rule>
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,css,info,txt,md,yml"/>
+  <exclude-pattern>/node_modules/</exclude-pattern>
+  <exclude-pattern>/dist/</exclude-pattern>
+  <exclude-pattern>*.min.*</exclude-pattern>
+  <exclude-pattern>vendor/*</exclude-pattern>
+  <file>./openy_gated_content</file>
+</ruleset>
