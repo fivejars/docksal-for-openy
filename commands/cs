@@ -7,7 +7,6 @@
 set -e
 
 # Copy required files.
-[ -f grumphp.yml ] && echo "File grumphp.yml exist." || cp .docksal/files/grumphp.yml .
 [ -f .phpcs.xml ] && echo "File .phpcs.xml exist." || cp .docksal/files/.phpcs.xml .
 
 echo "Check coding standards:"
