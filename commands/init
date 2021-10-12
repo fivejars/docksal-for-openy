@@ -228,6 +228,8 @@ enable_modules ()
 	for SITE in @rose @lily @carnation @upgrade; do
 		fin drush $SITE en -y stage_file_proxy views_ui dblog openy_gc_shared_content
 		fin drush $SITE upwd admin open9622
+		fin drush $SITE user-add-role "administrator" admin
+		fin drush $SITE user-add-role "virtual_y" admin
 	done
 }
 
