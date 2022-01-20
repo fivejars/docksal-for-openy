@@ -10,10 +10,10 @@ set -e
 [ -f .phpcs.xml ] && echo "File .phpcs.xml exists." || cp .docksal/files/.phpcs.xml .
 
 echo "Check coding standards:"
-fin run-cli --clean ./vendor/bin/phpcs
+fin run-cli --image=$CLI_IMAGE --clean ./vendor/bin/phpcs
 
 echo "Check code for deprecations:"
-fin run-cli ./vendor/bin/drupal-check openy_gated_content
+fin run-cli --image=$CLI_IMAGE --clean ./vendor/bin/drupal-check openy_gated_content
 
 echo "Check JS application with linter"
 cd "${PROJECT_ROOT}/openy_gated_content/js/gated-content"
