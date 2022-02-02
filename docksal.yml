@@ -28,6 +28,9 @@ services:
     extends:
       file: ${HOME}/.docksal/stacks/services.yml
       service: solr
+    image: ${SOLR_IMAGE}
+    volumes:
+      - ${PROJECT_ROOT}/.docksal/etc/solr/conf:/var/lib/solr/conf:ro
 
 volumes:
   composer_cache:
